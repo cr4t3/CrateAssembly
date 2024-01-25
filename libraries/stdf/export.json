@@ -1,0 +1,28 @@
+{
+    "file": "stdf.py",
+    "functions": [{
+        "name": "mov",
+        "call": "mov",
+        "args": 2
+    }, {
+        "name": "add",
+        "call": "add",
+        "args": 2
+    },  {
+        "name": "sub",
+        "call": "sub",
+        "args": 2
+    }, {
+        "name": "inc",
+        "call": "inc",
+        "args": 1
+    }, {
+        "name": "dec",
+        "call": "dec",
+        "args": 1
+    }, {
+        "name": "prt",
+        "call": "prt",
+        "args": 1
+    }]
+}
