@@ -1,10 +1,6 @@
 {
     "libraries": [
         {
-            "name": "math",
-            "path": "math"
-        },
-        {
             "name": "stdf",
             "path": "stdf"
         }
