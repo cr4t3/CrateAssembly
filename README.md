@@ -25,9 +25,3 @@ If you want to use the code for your own, you are allowed! This is a open-source
 ## Found a bug?
 
 If you found a bug, before of making a pull request, open a issue first (if that issue wasn't created before by another user), after that, open a pull request. I will review every pull request to verify the issue.
-
-## Known bugs
-None
-
-## To-do
-New types
