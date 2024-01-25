@@ -1,6 +1,8 @@
 # CrateAssembly Programming Language
 ![Static Badge](https://img.shields.io/badge/3.11.4-blue?style=for-the-badge&logo=python&logoColor=white&label=python)
 
+## Read the docs: https://crates-organization.gitbook.io/crateassembly/
+
 ## A functional programming language based on Assembly written in Python 3
 
 CrateAssembly is a open-source project built with the idea of making a easier assembly version. This are the things that CrateAssembly has that you may like!
