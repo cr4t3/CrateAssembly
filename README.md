@@ -13,7 +13,7 @@ CrateAssembly is a open-source project built with the idea of making a easier as
 ## How to install
 1. Download the git repo
 2. Extract the zip file
-3. If you don't have ython 3, you have to install it here https://www.python.org/downloads/
+3. If you don't have Python 3, you have to install it here https://www.python.org/downloads/
 4. In a shell, execute the command `python3 -f helloworld.casm`
 5. If it returns `0.0` then you are ready to go! If not, report what the shell returns in the github issue section
 6. To run it in another casm file, use the `-f` or `--file` flag.
