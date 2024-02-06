@@ -1,4 +1,4 @@
-import variables, errorhandler, math
+import variables
 
 def mov(var_name: str, value):
     try:
