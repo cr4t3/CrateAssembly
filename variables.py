@@ -1,7 +1,10 @@
-import errorhandler
+import errorhandler, string
 variables = {}
 
 def mov(name: str, value):
+    if True in [punctuation in name for punctuation in list(string.punctuation)]    :
+        return False # This returns false if there is punctuation in the var name, so vars cant be called things like "." or "/"
+    
     try:
         float(name)
         errorhandler.TypeError_(name, "string", "float")
@@ -11,6 +14,9 @@ def mov(name: str, value):
         return True
 
 def get(name: str):
+    if True in [punctuation in name for punctuation in list(string.punctuation)]    :
+        return False # This returns false if there is punctuation in the var name, so vars cant be called things like "." or "/"
+
     try:
         variables[name]
         return variables[name]
