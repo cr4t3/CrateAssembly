@@ -29,7 +29,7 @@ def scan_libraries(library_name):
                     for function_info in functions:
                         function_name = function_info.get("name")
                         args_count = function_info.get("args", 0)
-                        call = function_info.get("call")
+                        call = function_info.get("call") if function_info.get("call") != None else function_name
 
                         if hasattr(module, function_name) and callable(getattr(module, function_name)):
                             # If the function exists, register it with its name in global_functions
