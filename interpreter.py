@@ -1,5 +1,10 @@
 # Parse file into the expected functions
 import libraries, errorhandler
+from pathlib import Path
+
+SOURCE_LIBRARIES_PATH: str = Path(__file__).parent.absolute() / "libraries"
+
+HOME_LIBRARIES_PATH: Path = Path.home() / ".casm/libraries"
 
 def interpret_file(file: str):
     with open(file, "r") as script:
@@ -28,9 +33,9 @@ def interpret_file(file: str):
                     elif arg == "include":
                         functionDone = True
                         if len(args) == 2:
-                            found = libraries.scan_libraries_source(args[1])
+                            found = libraries.scan_libraries(args[1], SOURCE_LIBRARIES_PATH)
                             if not found:
-                                found2 = libraries.scan_libraries_home(args[1])
+                                found2 = libraries.scan_libraries(args[1], HOME_LIBRARIES_PATH)
                                 if not found2:
                                     print(f"Library \"{args[1]}\" not found")
                                     exit()
