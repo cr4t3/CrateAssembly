@@ -71,7 +71,7 @@ class Module:
         
         
         module_name = name.replace("-", "_")  # Convert hyphens to underscores
-        spec = importlib.util.spec_from_file_location(module_name, f"{libraries_path}/{path}/{library_file}")
+        spec = importlib.util.spec_from_file_location(module_name, f"{self.libraries_path}/{self.path}/{self.library_file}")
         self.module: ModuleType = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(self.module)
     
@@ -112,12 +112,12 @@ def scan_libraries(library_name: str, libraries_path: Path) -> bool:
                     export = json.load(open(f"{libraries_path}/{path}/export.json", "r"))
                     library_file = export.get("file")
 
-                    module = Module(name, path, library_file, libraries_path)
+                    module = Module(name, libraries_path, path, library_file)
 
                     functions = export.get("functions")
 
                     for function_info in functions:
-                        module.load_function(function_info, name)
+                        module.load_function(function_info)
                     return True
             else:
                 return False
