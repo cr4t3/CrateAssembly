@@ -8,7 +8,7 @@ class Error:
             error_type (str): Error type (ex: 'TypeError', 'ModuleError')
             error_message (str): Error message
         """
-        print(f"{error_type}: {error_message}", file=sys.stderr)
+        rich.print(f"[#ff0000]{error_type}: {error_message}", file=sys.stderr)
         exit()
 
 class LengthError(Error):
@@ -26,6 +26,18 @@ class TypeError_(Error):
 class ModuleError(Error):
     def __init__(self, module: str, name: str) -> None:
         super().__init__("ModuleError", f"{module} module does not have the expected function: {name}")
+
+class ScanError(Error):
+    def __init__(self, e: Exception) -> None:
+        super().__init__("ScanError", f"scan_libraries has thrown an error: {e}")
+
+class LibraryNotFoundError(Error):
+    def __init__(self, library: str) -> None:
+        super().__init__("LibraryNotFoundError", f"Library \"{library}\" not found.")
+
+class FileNotFoundError_(Error):
+    def __init__(self, file_name: str) -> None:
+        super().__init__("FileNotFoundError", f"File '{file_name}' not found.")
 
 class Debug:
     def __init__(self, value) -> None:

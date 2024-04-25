@@ -10,6 +10,6 @@ aparser.add_argument("-v", "--version", action="version", version=version)
 args = aparser.parse_args()
 
 if args.file != None:
-    interpreter.interpret_file(args.file)
+    interpreter.load_file(args.file)
 else:
     print(args.file)
