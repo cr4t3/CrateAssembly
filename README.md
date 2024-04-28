@@ -26,4 +26,4 @@ If you want to use the code for your own, you are allowed! This is an open-sourc
 
 ## Found a bug?
 
-If you found a bug, before making a pull request, open an issue first (if that issue wasn't created before by another user), after that, open a pull request. I will review every pull request to verify the issue. Also, please open the pull request in the unstable branch, we will update the main branch once we have all the updates from the unstable branch done.
+If you found a bug, before of making a pull request, open a issue first (if that issue wasn't created before by another user), after that, open a pull request. I will review every pull request to verify the issue. Also, please open the pull request in the unstable branch, we will update the main branch once we have all the updates from the unstable branch done.
