@@ -1,5 +1,5 @@
 # CrateAssembly Programming Language
-![Static Badge](https://img.shields.io/badge/3.11.4-blue?style=for-the-badge&logo=python&logoColor=white&label=python)
+![Static Badge](https://img.shields.io/badge/3.12.1-blue?style=for-the-badge&logo=python&logoColor=white&label=python)
 
 ## Read the docs: https://crates-organization.gitbook.io/crateassembly/
 
