@@ -1,6 +1,13 @@
 import errorhandler, string
 variables = {}
 
+def is_variable(name):
+    try:
+        variables[name]
+        return True
+    except KeyError:
+        return False
+
 def mov(name: str, value):
     if True in [punctuation in name for punctuation in list(string.punctuation)]    :
         return False # This returns false if there is punctuation in the var name, so vars cant be called things like "." or "/"

@@ -1,13 +1,17 @@
-import argparse, parser
+import argparse, interpreter
 
 aparser = argparse.ArgumentParser()
 
-aparser.add_argument("-f", "--file")
-aparser.add_argument("-v", "--version", action="version", version="CrateAssembly 0.1.0")
+unstable = True
+
+version = "CrateAssembly 0.2.0" + " (Unstable)" if unstable else ""
+
+aparser.add_argument("file", help="Files path")
+aparser.add_argument("-v", "--version", action="version", version=version)
 
 args = aparser.parse_args()
 
 if args.file != None:
-    parser.parse_file(args.file)
+    interpreter.load_file(args.file)
 else:
     print(args.file)
