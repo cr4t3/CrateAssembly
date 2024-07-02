@@ -39,6 +39,15 @@ class FileNotFoundError_(Error):
     def __init__(self, file_name: str) -> None:
         super().__init__("FileNotFoundError", f"File '{file_name}' not found.")
 
+class StatusCodeError(Error):
+    def __init__(self, function: str) -> None:
+        super().__init__("StatusCodeError", f"Function {function} returned a error status code.")
+
+class InvalidVariableName(Error):
+    def __init__(self, name: str) -> None:
+        super().__init__("InvalidVariableName", f"Variable name {name} is invalid.")
+
 class Debug:
     def __init__(self, value) -> None:
         rich.print(f"[green]{value}")
+

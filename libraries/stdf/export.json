@@ -2,44 +2,21 @@
     "file": "stdf.py",
     "functions": [
         {
-            "name": "mov",
-            "args": 2
-        },
-        {
-            "name": "add",
-            "args": 2
-        },
-        {
-            "name": "sub",
-            "args": 2
-        },
-        {
-            "name": "inc",
+            "name": "exit_",
+            "call": "exit",
             "args": 1
         },
         {
-            "name": "dec",
+            "name": "inff",
+            "args": 1
+        },
+        {
+            "name": "infi",
             "args": 1
         },
         {
             "name": "prt",
             "args": 1
-        },
-        {
-            "name": "mul",
-            "args": 2
-        },
-        {
-            "name": "div",
-            "args": 2
-        },
-        {
-            "name": "elev",
-            "args": 2
-        },
-        {
-            "name": "root",
-            "args": 2
         }
     ]
 }

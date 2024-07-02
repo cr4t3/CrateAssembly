@@ -1,0 +1,68 @@
+{
+    "file": "x86.py",
+    "functions": [
+        {
+            "name": "cmp",
+            "args": 2
+        },
+        {
+            "name": "jmp",
+            "args": 1
+        },
+        {
+            "name": "je",
+            "args": 1
+        },
+        {
+            "name": "jne",
+            "args": 1
+        },
+        {
+            "name": "and_",
+            "call": "and",
+            "args": 2
+        },
+        {
+            "name": "or_",
+            "call": "or",
+            "args": 2
+        },
+        {
+            "name": "xor",
+            "args": 2
+        },
+        {
+            "name": "not_",
+            "call": "not",
+            "args": 1
+        },
+        {
+            "name": "mov",
+            "args": 2
+        },
+        {
+            "name": "add",
+            "args": 2
+        },
+        {
+            "name": "sub",
+            "args": 2
+        },
+        {
+            "name": "mul",
+            "args": 2
+        },
+        {
+            "name": "div",
+            "args": 2
+        },
+        {
+            "name": "inc",
+            "args": 1
+        },
+        {
+            "name": "dec",
+            "args": 1
+        }
+    ]
+}

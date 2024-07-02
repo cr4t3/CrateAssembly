@@ -1,10 +1,12 @@
 import importlib.util
-import json, os
+import ujson, os
 from pathlib import Path
 from types import ModuleType
 from io import TextIOWrapper
 import errorhandler
 from typing import Callable
+from functools import cache
+import utils
 
 def create_libraries_json(path: Path) -> None:
     """create_libraries_json creates the libraries.json file in the given path
@@ -50,7 +52,8 @@ ensure_casm_and_libraries_folders()
 
 global_functions: dict[dict[Callable, int]] = {}
 
-def load_libraries_json(File: TextIOWrapper) -> list[dict[str, str]]:
+@cache
+def load_libraries_json(File: str) -> list[dict[str, str]]:
     """Loads the libraries.json file
 
     Args:
@@ -59,7 +62,7 @@ def load_libraries_json(File: TextIOWrapper) -> list[dict[str, str]]:
     Returns:
         list: The list of libraries in the 'libraries.json'
     """
-    library_data: dict = json.load(File)
+    library_data: dict = ujson.load(File)
     libraries: list = library_data.get("libraries", [])
     return libraries
 
@@ -71,20 +74,21 @@ class Module:
         self.library_file: str = library_file
         
         
-        module_name = name.replace("-", "_")  # Convert hyphens to underscores
+        module_name: str = name.replace("-", "_")  # Convert hyphens to underscores
         spec = importlib.util.spec_from_file_location(module_name, f"{self.libraries_path}/{self.path}/{self.library_file}")
         self.module: ModuleType = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(self.module)
-    
-    def load_function(self, function_info: dict) -> None:
+    @cache
+    def load_function(self, function_info: tuple) -> None:
         """Loads the function from the loaded module (self.module)
 
         Args:
-            function_info (dict): Function's name and arg count 
+            function_info (tuple): Function's name and arg count 
         """
-        function_name: str = function_info.get("name")
+        function_info = utils.td(function_info)
+        function_name: str = function_info.get("name").lower()
         args_count: int = function_info.get("args", 0)
-        call: Callable = function_info.get("call") if function_info.get("call") != None else function_name
+        call: Callable = function_info.get("call").lower() if function_info.get("call") != None else function_name
         if hasattr(self.module, function_name) and callable(getattr(self.module, function_name)):
             # If the function exists, register it with its name in global_functions
             global_functions[call if call else function_name] = {"function": getattr(self.module, function_name), "args": args_count}
@@ -93,8 +97,8 @@ class Module:
     
     def load_functions(self, functions: list) -> None:
         for function_info in functions:
-            self.load_function(function_info)
-
+            self.load_function(utils.dt(function_info))
+@cache
 def load_export(libraries_path: Path, path: str) -> tuple[dict[str, list], str]:
     """Loads the export.json file of a library
 
@@ -105,12 +109,12 @@ def load_export(libraries_path: Path, path: str) -> tuple[dict[str, list], str]:
     Returns:
         tuple[dict[str, list], str]: Returns the 'export.json' as a dict, and the library file .py name.
     """
-    export: dict[str, list] = json.load(open(f"{libraries_path}/{path}/export.json", "r"))
+    export: dict[str, list] = ujson.load(open(f"{libraries_path}/{path}/export.json", "r"))
     library_file: str = export.get("file")
     
     return export, library_file
 
-def load_library_data(library: dict[str, str]) -> tuple[str, str]:
+def load_library_data(library: tuple) -> tuple[str, str]:
     """Loads the library's data
 
     Args:
@@ -119,6 +123,7 @@ def load_library_data(library: dict[str, str]) -> tuple[str, str]:
     Returns:
         tuple[str, str]: Name and path (separated)
     """
+    library = utils.td(library)
     name: str = library.get("name")
     path: str = library.get("path")
     
@@ -152,7 +157,7 @@ def scan_library(library: dict[str, str], library_name: str, libraries_path: Pat
         bool: Returned if found
         None: Returned if not found
     """
-    name, path = load_library_data(library)
+    name, path = load_library_data(utils.dt(library))
                 
     if name == library_name:
                     
@@ -161,7 +166,7 @@ def scan_library(library: dict[str, str], library_name: str, libraries_path: Pat
         return True
 
 def scan_libraries(library_name: str, libraries_path: Path) -> bool:
-    """Scan the libraries to search foor the asked library
+    """Scan the libraries to search for the asked library
 
     Args:
         library_name (str): Name of the library to find
@@ -181,4 +186,5 @@ def scan_libraries(library_name: str, libraries_path: Path) -> bool:
             else:
                 return False
     except Exception as e:
-        errorhandler.ScanError(e)
+        raise e
+    #    errorhandler.ScanError(e)
