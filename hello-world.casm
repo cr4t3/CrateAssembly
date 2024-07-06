@@ -1,13 +1,13 @@
 include stdf
+include x86
+
+; X86 functions
 
 mov eax 0 ; Sets eax to 0
 add eax 3 ; Adds 3 to eax
 sub eax 3 ; Subtracts 3 from eax
 mul eax 3 ; Multiplies 3 times eax
 div eax 3 ; Divides eax from 3
-elev eax 3 ; Elevates eax to the cube
-root eax 3 ; The cube root from eax (3)
 inc eax ; Adds 1 to eax
 dec eax ; Subtracts 1 from eax
-
-prt eax ; Prints eax
+cmp eax 0 ; Compares eax to 0

@@ -2,16 +2,21 @@
 import libraries, errorhandler
 from pathlib import Path
 from typing import Callable
+from functools import cache
+import main
 
 SOURCE_LIBRARIES_PATH: Path = Path(__file__).parent.absolute() / "libraries"
 
 HOME_LIBRARIES_PATH: Path = Path.home() / ".casm/libraries"
 
+line_number = 0
+
+@cache
 def load_function_data(callname: str) -> tuple[int, Callable]:
     """Load the function data
 
     Args:
-        arg (str): Call name of the function
+        callname (str): Call name of the function
 
     Returns:
         tuple[int, Callable]: Arg count and the function executable
@@ -22,7 +27,7 @@ def load_function_data(callname: str) -> tuple[int, Callable]:
     
     return arg_count, Function
 
-def include(args: list[str]) -> bool:
+  def include(args: list[str], readUntil: int) -> bool:
     """Includes the asked library
 
     Args:
@@ -31,14 +36,14 @@ def include(args: list[str]) -> bool:
     Returns:
         bool: True if loaded
     """
-    if len(args) == 2:
+    if (calculate_args(len(args), readUntil)) == 1:
         if libraries.scan_libraries(args[1], SOURCE_LIBRARIES_PATH) or libraries.scan_libraries(args[1], HOME_LIBRARIES_PATH):
             return True
         errorhandler.LibraryNotFoundError(args[1])
     else:
         errorhandler.LengthError("include", 1, len(args)-1)
-
-def calculate_args(args: list[str], readUntil: int) -> int:
+@cache
+def calculate_args(length: int, readUntil: int) -> int:
     """Calculates the readable args count
 
     Args:
@@ -48,9 +53,9 @@ def calculate_args(args: list[str], readUntil: int) -> int:
     Returns:
         int: Readable args count
     """
-    return ((len(args)-1)-(len(args)-readUntil) if readUntil != -1 else len(args)-1)
-
-def get_args(args: list[str], readUntil: int) -> list[str]:
+    return ((length-1)-(length-readUntil) if readUntil != -1 else length-1)
+@cache
+def get_args(args: tuple, readUntil: int) -> list[str]:
     """Returns a function's arguments
 
     Args:
@@ -60,7 +65,8 @@ def get_args(args: list[str], readUntil: int) -> list[str]:
     Returns:
         list[str]: Args for function
     """
-    return [f"'{arg}'" for arg in args[1:readUntil] if arg]
+    args = list(args)
+    return [f"{arg}" for arg in args[1:readUntil if readUntil != -1 else len(args):] if arg]
 
 def execute_function(args: list[str], readUntil: int, Function: Callable) -> bool:
     """Executes a function from a library
@@ -73,8 +79,10 @@ def execute_function(args: list[str], readUntil: int, Function: Callable) -> boo
     Returns:
         bool: True if didn't crashes
     """
-    arg_list: list[str] = get_args(args, readUntil)
-    eval(f"Function({', '.join(arg_list)})")
+    arg_list: list[str] = get_args(tuple(args), readUntil)
+    code = Function(*arg_list)
+    if not (code == 0 or code == None) and not (main.args.ignore_status_codes):
+        errorhandler.StatusCodeError(args[0])
     return True
 
 def run_function(args: list[str], readUntil: int, arg: str) -> bool:
@@ -89,10 +97,10 @@ def run_function(args: list[str], readUntil: int, arg: str) -> bool:
         bool: True if executed
     """
     arg_count, Function = load_function_data(arg)
-    if (calculate_args(args, readUntil)) == arg_count:
+    if (calculate_args(len(args), readUntil)) == arg_count:
         return execute_function(args, readUntil, Function)
     else:
-        errorhandler.LengthError(arg, arg_count, calculate_args(arg, readUntil))
+        errorhandler.LengthError(arg, arg_count, calculate_args(len(args), readUntil))
 
 def interpret_arg(args: list[str], arg: str, i: int, readUntil: int, functionDone: bool) -> str | None | bool:
     """Interprets an argument
@@ -114,12 +122,12 @@ def interpret_arg(args: list[str], arg: str, i: int, readUntil: int, functionDon
     elif functionDone:
         pass
     elif arg == "include":
-        return include(args)                        
+        return include(args, readUntil)                        
     elif arg in list(libraries.global_functions.keys()):
         return run_function(args, readUntil, arg)                        
     else:
         errorhandler.DefinitionError(arg)
-
+@cache
 def skip_comments(arg: str, i: int) -> tuple[int, str]:
     """Verifies when each line has a comment
 
@@ -135,7 +143,7 @@ def skip_comments(arg: str, i: int) -> tuple[int, str]:
         return readUntil, "break"
 
 def get_read_until(args: list[str]) -> int:
-    """_summary_
+    """Calculates where to end read in each line
 
     Args:
         args (list[str]): Arguments
@@ -152,6 +160,7 @@ def get_read_until(args: list[str]) -> int:
                 return readUntil
     else:
         readUntil = -1
+        return readUntil
     
 
 def interpret_args(args: list[str], readUntil: int, functionDone: bool) -> None:
@@ -165,7 +174,7 @@ def interpret_args(args: list[str], readUntil: int, functionDone: bool) -> None:
     for i, arg in enumerate(args):
         if interpret_arg(args, arg, i, readUntil, functionDone) == "break":
             return
-
+@cache
 def load_line_data(line: str) -> tuple[list[str], bool, int]:
     """Loads the information about the given line
 
@@ -191,14 +200,19 @@ def interpret_line(line: str) -> None:
 
         interpret_args(args, readUntil, functionDone)
 
-def interpret_file(content: str) -> None:
+def interpret_file(content: list[str]) -> None:
     """Interprets the file's content
 
     Args:
-        content (str): Content
+        content (list[str]): Content in list form
     """
-    for line in content:
-            interpret_line(line)
+    global line_number
+    while line_number < len(content):
+        line = content[line_number]
+        interpret_line(line)
+        
+        line_number += 1
+        
 
 def load_file(File: str) -> None:
     """Loads the given file name
@@ -208,7 +222,8 @@ def load_file(File: str) -> None:
     """
     try:
         with open(File, "r") as script:
-            content: str = script.read().rsplit("\n")         
+
+            content: str = script.read().lower().rsplit("\n")
             interpret_file(content)
     except FileNotFoundError:
         errorhandler.FileNotFoundError_(File)

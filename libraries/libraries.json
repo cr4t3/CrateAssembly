@@ -3,6 +3,10 @@
         {
             "name": "stdf",
             "path": "stdf"
+        },
+        {
+            "name": "x86",
+            "path": "x86"
         }
     ]
 }
