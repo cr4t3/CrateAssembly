@@ -52,6 +52,7 @@ ensure_casm_and_libraries_folders()
 
 global_functions: dict[dict[Callable, int]] = {}
 
+
 @cache
 def load_libraries_json(File: str) -> list[dict[str, str]]:
     """Loads the libraries.json file
@@ -114,6 +115,7 @@ def load_export(libraries_path: Path, path: str) -> tuple[dict[str, list], str]:
     
     return export, library_file
 
+
 def load_library_data(library: tuple) -> tuple[str, str]:
     """Loads the library's data
 
@@ -166,6 +168,7 @@ def scan_library(library: dict[str, str], library_name: str, libraries_path: Pat
         return True
 
 def scan_libraries(library_name: str, libraries_path: Path) -> bool:
+
     """Scan the libraries to search for the asked library
 
     Args:

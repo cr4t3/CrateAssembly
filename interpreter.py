@@ -27,7 +27,7 @@ def load_function_data(callname: str) -> tuple[int, Callable]:
     
     return arg_count, Function
 
-def include(args: list[str], readUntil: int) -> bool:
+  def include(args: list[str], readUntil: int) -> bool:
     """Includes the asked library
 
     Args:
@@ -222,6 +222,7 @@ def load_file(File: str) -> None:
     """
     try:
         with open(File, "r") as script:
+
             content: str = script.read().lower().rsplit("\n")
             interpret_file(content)
     except FileNotFoundError:

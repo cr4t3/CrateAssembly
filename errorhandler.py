@@ -50,4 +50,3 @@ class InvalidVariableName(Error):
 class Debug:
     def __init__(self, value) -> None:
         rich.print(f"[green]{value}")
-

@@ -10,7 +10,4 @@ mul eax 3 ; Multiplies 3 times eax
 div eax 3 ; Divides eax from 3
 inc eax ; Adds 1 to eax
 dec eax ; Subtracts 1 from eax
-
-; STDF function
-
-prt eax ; Prints eax
+cmp eax 0 ; Compares eax to 0
